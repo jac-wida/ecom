@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Message from "../components/Message";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Message from '../components/Message';
+import { Link } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -10,12 +10,12 @@ import {
   Form,
   ListGroup,
   Button,
-} from "react-bootstrap";
-import { addToCart, removeFromCart } from "../actions/cartActions";
+} from 'react-bootstrap';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id;
-  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+  const qty = location.search ? Number(location.search.split('=')[1]) : 1;
   console.log(qty);
 
   const dispatch = useDispatch();
@@ -23,6 +23,10 @@ const CartScreen = ({ match, location, history }) => {
 
   const { cartItems } = cart;
   console.log(cartItems);
+
+  // const userLogin = useSelector((state) => state.userLogin);
+
+  // const { userInfo } = userLogin;
 
   useEffect(() => {
     if (productId) {
@@ -36,7 +40,7 @@ const CartScreen = ({ match, location, history }) => {
   };
 
   const checkOutHandler = () => {
-    history.push("/login?redirect=shipping");
+    history.push(`/login?redirect=shipping`);
   };
   return (
     <Row>

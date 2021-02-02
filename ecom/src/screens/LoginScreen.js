@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -20,12 +20,10 @@ const LoginScreen = ({ location, history }) => {
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
   useEffect(() => {
-    // if (userInfo) {
-    //   history.push(redirect);
-    // }
-    userInfo ? <Redirect to='/' /> : <Redirect to='/login' />;
-  }, [userInfo]);
-
+    if (userInfo) {
+      history.push(redirect);
+    }
+  }, [history, userInfo, redirect]);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
@@ -41,6 +39,7 @@ const LoginScreen = ({ location, history }) => {
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type='email'
+            required
             placeholder='Enter email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -51,6 +50,7 @@ const LoginScreen = ({ location, history }) => {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
+            required
             placeholder='Enter password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
