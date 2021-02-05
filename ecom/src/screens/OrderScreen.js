@@ -1,21 +1,60 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Image, ListGroup, Button, Card } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { PayPalButton } from 'react-paypal-button-v2';
+import axios from 'axios';
+import { Row, Col, Image, ListGroup, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getOrderDetails } from '../actions/orderActions';
+import { getOrderDetails, payOrder } from '../actions/orderActions';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 const OrderScreen = ({ match }) => {
   const orderId = match.params.id;
 
+  const [sdkReady, setSdkReady] = useState(false);
+
+  const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
 
-  const dispatch = useDispatch();
+  const successPaymentHandler = (paymentResult) => {
+    console.log(paymentResult);
+
+    dispatch(payOrder(orderId, paymentResult));
+  };
+
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
+
   useEffect(() => {
-    dispatch(getOrderDetails(orderId));
-  }, []);
+    const addPayPalScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal');
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+      script.async = true;
+      script.onload = () => {
+        setSdkReady(true);
+      };
+      document.body.appendChild(script);
+      console.log(clientId);
+    };
+
+    addPayPalScript();
+
+    if (!order || successPay) {
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch(getOrderDetails(orderId));
+    } else if (!order.paid) {
+      if (!window.paypal) {
+        addPayPalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
+    // eslint-disable-next-line
+  }, [dispatch, orderId]);
 
   if (!loading) {
     order.itemsPrice = order.orderItems.reduce(
@@ -35,11 +74,18 @@ const OrderScreen = ({ match }) => {
         <Col md={8}>
           <ListGroup variant=''>
             <ListGroup.Item>
-              <h2>SHIPPING ANDRESS</h2>
-              <strong>{order.user.name}</strong>
-              <a href={`mailto: ${order.user.email}`}>{order.user.email}</a>
+              <h2>SHIPPING:</h2>
               <p>
-                {/* <>Address : </> */}
+                <strong>Name: {order.user.name}</strong>
+              </p>
+              <p>
+                <strong>
+                  Email:{' '}
+                  <a href={`mailto: ${order.user.email}`}>{order.user.email}</a>
+                </strong>
+              </p>
+              <p>
+                <strong>Address : </strong>
                 {order.shippingAddress.address}, {order.shippingAddress.city},
                 {order.shippingAddress.postalCode},{' '}
                 {order.shippingAddress.country}
@@ -56,7 +102,7 @@ const OrderScreen = ({ match }) => {
               {/* <strong>Method: </strong> */}
               <p>{order.paymentMethod}</p>
               {order.isPaid ? (
-                <Message variant='success'>{order.paidAt}</Message>
+                <Message variant='success'>Paid on: {order.paidAt}</Message>
               ) : (
                 <Message variant='danger'>Not Paid</Message>
               )}
@@ -130,6 +176,19 @@ const OrderScreen = ({ match }) => {
                   </Col>
                 </Row>
               </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={order.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
