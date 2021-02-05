@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -8,12 +8,13 @@ import {
   Image,
   Button,
   Form,
-} from "react-bootstrap";
-import Rating from "../components/Rating";
-import { useDispatch, useSelector } from "react-redux";
-import { listProductDetail } from "../actions/productActions";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
+} from 'react-bootstrap';
+import Rating from '../components/Rating';
+import { useDispatch, useSelector } from 'react-redux';
+import { listProductDetail } from '../actions/productActions';
+// import Loader from "../components/Loader";
+import Spinnner from '../components/Spinner';
+import Message from '../components/Message';
 
 const ProductScreen = ({ match, history }) => {
   // const product = products.find((p) => p._id === match.params.id);
@@ -34,13 +35,13 @@ const ProductScreen = ({ match, history }) => {
   return (
     <>
       <Link className='btn btn-light my-3' to='/'>
-        {" "}
+        {' '}
         <i className='fas fa-arrow-left m-1' />
         GO BACK
       </Link>
 
       {loading ? (
-        <Loader />
+        <Spinnner />
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
@@ -102,7 +103,7 @@ const ProductScreen = ({ match, history }) => {
                   <Row>
                     <Col>STATUS: </Col>
                     <Col>
-                      {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                      {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
                     </Col>
                   </Row>
                 </ListGroup.Item>
