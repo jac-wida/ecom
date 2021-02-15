@@ -1,0 +1,27 @@
+.parent{
+    position: relative;
+    overflow: hidden;
+}
+
+.badge{
+   
+  position: absolute;
+  top: 10px;
+  left: 210px;
+  z-index: 1;
+  cursor: pointer;
+    
+  @media (max-width: 1000px){
+    left: 500px;
+  
+  }
+}
+
+.svg:hover{
+  fill: red;
+
+}
+
+.img{
+   position: relative;
+}
