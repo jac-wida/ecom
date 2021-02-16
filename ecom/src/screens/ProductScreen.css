@@ -1,0 +1,30 @@
+.border{
+    border: 2px solid rgba(0, 0, 0, 0.575);
+}
+.select{
+    max-width: 120px;
+    position: relative;
+    top:23px;
+    height: 48px;
+    
+    
+    
+}
+
+.parent{
+    vertical-align: middle;
+    margin-top: 30px;
+    
+}
+
+.opi{
+    position: relative;
+    top: 49px;
+    left: 15px;
+}
+.svg{
+    cursor: pointer;
+    position: relative;
+    left: 350px;
+    top: 35px;
+}
