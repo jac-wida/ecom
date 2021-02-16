@@ -22,7 +22,7 @@ const App = () => {
     <Router>
       <Header />
       <main>
-        <Container>
+        <>
           <Route path='/order/:id' component={OrderScreen} />
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/shipping' component={ShippingScreen} />
@@ -36,7 +36,7 @@ const App = () => {
           <Route path='/admin/productlist' component={ProductListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
           <Route path='/' component={HomeScreen} exact />
-        </Container>
+        </>
       </main>
       <Footer />
     </Router>
