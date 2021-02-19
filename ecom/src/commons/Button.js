@@ -35,6 +35,38 @@ export const Button = styled.div`
           cursor: pointer;
         `}
 `;
+export const HomeButton = styled.button`
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  background-image: none;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 16px;
+  display: flex;
+  max-width: 200px;
+  height: 48px;
+  position: relative;
+  left: 50px;
+  color: rgb(255, 255, 255);
+  justify-content: center;
+  flex: 3 1 0%;
+  ${(p) =>
+    p.disabled
+      ? css`
+          background: #ccc;
+          cursor: not-allowed;
+        `
+      : css`
+          background-color: rgb(67, 176, 42);
+          cursor: pointer;
+        `}
+`;
 
 export const Price = styled.h1`
   color: #f30240;

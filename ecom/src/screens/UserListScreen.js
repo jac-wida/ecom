@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Spinnner from '../components/Spinner';
@@ -31,7 +31,7 @@ const UserListScreen = ({ history }) => {
     }
   };
   return (
-    <>
+    <Container>
       <h1>Users</h1>
       {loading ? (
         <Spinnner />
@@ -83,7 +83,7 @@ const UserListScreen = ({ history }) => {
           </tbody>
         </Table>
       )}
-    </>
+    </Container>
   );
 };
 

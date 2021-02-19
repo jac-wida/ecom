@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
-import { Row, Col, Image, ListGroup, Button, Card } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Button,
+  Card,
+  Container,
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -56,7 +64,7 @@ const PlaceOrderScreen = ({ history }) => {
   ).toFixed(2);
 
   return (
-    <>
+    <Container>
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
@@ -162,7 +170,7 @@ const PlaceOrderScreen = ({ history }) => {
           </Card>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 

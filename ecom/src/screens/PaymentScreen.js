@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button, Col, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
@@ -24,24 +24,25 @@ const PaymentScreen = ({ history }) => {
   };
 
   return (
-    <FormContainer>
-      <CheckoutSteps step1 step2 step3 />
-      <h1>Payment Method</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group>
-          <Form.Label as='legend'>Select Method</Form.Label>
+    <Container>
+      <FormContainer>
+        <CheckoutSteps step1 step2 step3 />
+        <h1>Payment Method</h1>
+        <Form onSubmit={submitHandler}>
+          <Form.Group>
+            <Form.Label as='legend'>Select Method</Form.Label>
 
-          <Col>
-            <Form.Check
-              type='radio'
-              label='Paypal or Credit Card'
-              id='Paypal'
-              value='Paypal'
-              name='paymentMethod'
-              checked
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            ></Form.Check>
-            {/* <Form.Check
+            <Col>
+              <Form.Check
+                type='radio'
+                label='Paypal or Credit Card'
+                id='Paypal'
+                value='Paypal'
+                name='paymentMethod'
+                checked
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              ></Form.Check>
+              {/* <Form.Check
               type='radio'
               label='stripe'
               id='Stripe'
@@ -49,11 +50,12 @@ const PaymentScreen = ({ history }) => {
               name='paymentMethod'
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check> */}
-          </Col>
-        </Form.Group>
-        <Button type='submit'>Continue</Button>
-      </Form>
-    </FormContainer>
+            </Col>
+          </Form.Group>
+          <Button type='submit'>Continue</Button>
+        </Form>
+      </FormContainer>
+    </Container>
   );
 };
 
