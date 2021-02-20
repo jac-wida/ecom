@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Background.css';
 
-const Background = () => {
+const Background = ({ history }) => {
+  const [keyword, setKeyword] = useState('');
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log('submitted');
+
+    if (keyword.trim()) {
+      history.push(`/search/${keyword}`);
+    } else {
+      history.push('/');
+    }
+  };
   return (
     <div className='top'>
       <div className='content'>
@@ -10,11 +22,13 @@ const Background = () => {
         </div>
         <div className='form'>
           <div className='search'>
-            <form>
+            <form onSubmit={submitHandler}>
               <input
                 type='search'
                 placeholder='What Do You Want To Shop'
                 className='box'
+                name='q'
+                onChange={(e) => setKeyword(e.target.value)}
               />
               <div className='svi'>
                 <svg
@@ -26,6 +40,9 @@ const Background = () => {
                   <path d='M23.809 21.646l-6.205-6.205c1.167-1.605 1.857-3.579 1.857-5.711 0-5.365-4.365-9.73-9.731-9.73-5.365 0-9.73 4.365-9.73 9.73 0 5.366 4.365 9.73 9.73 9.73 2.034 0 3.923-.627 5.487-1.698l6.238 6.238 2.354-2.354zm-20.955-11.916c0-3.792 3.085-6.877 6.877-6.877s6.877 3.085 6.877 6.877-3.085 6.877-6.877 6.877c-3.793 0-6.877-3.085-6.877-6.877z' />
                 </svg>
               </div>
+              <button type='submit' className='button'>
+                Search
+              </button>
             </form>
           </div>
         </div>

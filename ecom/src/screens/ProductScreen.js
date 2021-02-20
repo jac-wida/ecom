@@ -1,27 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Image, Form, Container } from 'react-bootstrap';
-
-import { Button, Price, Title, Badge, PriceBadge } from '../commons';
-
+import {
+  Row,
+  Col,
+  Image,
+  Form,
+  Container,
+  ListGroup,
+  Button,
+} from 'react-bootstrap';
+import { Buttons, Price, Title, Badge, PriceBadge } from '../commons';
 import { useDispatch, useSelector } from 'react-redux';
-import { listProductDetail } from '../actions/productActions';
+import {
+  listProductDetail,
+  createProductReview,
+} from '../actions/productActions';
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 // import Loader from "../components/Loader";
 import Spinnner from '../components/Spinner';
 import Message from '../components/Message';
+import Rating from '../components/Rating';
 import './ProductScreen.css';
 
 const ProductScreen = ({ match, history }) => {
   // const product = products.find((p) => p._id === match.params.id);
   const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
   const dispatch = useDispatch();
   const productDetail = useSelector((state) => state.productDetail);
   const { loading, error, product } = productDetail;
 
+  const reviewCreate = useSelector((state) => state.reviewCreate);
+  const {
+    error: errorReview,
+    loading: loadingReview,
+    success: successReview,
+  } = reviewCreate;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   useEffect(() => {
+    if (successReview) {
+      setComment('');
+      setRating(0);
+    }
     dispatch(listProductDetail(match.params.id));
-  }, [dispatch, match]);
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_RESET,
+    });
+  }, [dispatch, match, successReview]);
 
   const addToCart = () => {
     if (product.countInStock === 0) {
@@ -29,6 +59,17 @@ const ProductScreen = ({ match, history }) => {
     } else {
       history.push(`/cart/${match.params.id}?qty=${qty}`);
     }
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log('uiiiiii');
+    dispatch(
+      createProductReview(match.params.id, {
+        comment,
+        rating,
+      })
+    );
   };
 
   return (
@@ -80,14 +121,14 @@ const ProductScreen = ({ match, history }) => {
                   </Form.Control>
                 )}
 
-                <Button
+                <Buttons
                   onClick={addToCart}
                   type='button'
                   disabled={product.countInStock === 0}
                 >
                   {' '}
                   <i className='fas fa-plus'></i> ADD TO CART
-                </Button>
+                </Buttons>
               </div>
               {/* <Row>DESCRIPTION: {product.description}</Row> */}
 
@@ -107,6 +148,68 @@ const ProductScreen = ({ match, history }) => {
             <Col md={6}>
               <h3>Details</h3>
               <p>{product.description}</p>
+            </Col>
+
+            <Col md={6}>
+              <h2>Reviews</h2>
+              {product.reviews.length === 0 && (
+                <Message variant='info'>No Reviews</Message>
+              )}
+              <ListGroup>
+                {product.reviews.map((r) => (
+                  <ListGroup.Item key={r._id}>
+                    <strong>{r.name}</strong>
+                    <Rating value={r.rating} />
+                    <p>{r.createdAt.substring(0, 10)}</p>
+                    <p>{r.comment}</p>
+                  </ListGroup.Item>
+                ))}
+
+                <ListGroup.Item>
+                  {userInfo && userInfo.isAdmin ? (
+                    <strong>Admins can not Review</strong>
+                  ) : userInfo && !userInfo.isAdmin ? (
+                    <>
+                      <h2>Write A review</h2>
+                      {errorReview && (
+                        <Message variant='danger'>{errorReview}</Message>
+                      )}
+
+                      <Form onSubmit={submitHandler}>
+                        <Form.Group controlId={rating}>
+                          <Form.Label>Rating</Form.Label>
+                          <Form.Control
+                            as='select'
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                          >
+                            <option value=''>Select.....</option>
+                            <option value='1'>1 - Poor</option>
+                            <option value='2'>2 - Fair</option>
+                            <option value='3'>3 - Good</option>
+                            <option value='4'>4 - Very Good</option>
+                            <option value='5'>5 - Excellent</option>
+                          </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId={comment}>
+                          <Form.Label>Comment</Form.Label>
+                          <Form.Control
+                            as='textarea'
+                            row={3}
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                          ></Form.Control>
+                        </Form.Group>
+                        <Button type='submit'>Submit Review</Button>
+                      </Form>
+                    </>
+                  ) : (
+                    <Message>
+                      <Link to='/login'>Sign In</Link> to Write A Review
+                    </Message>
+                  )}
+                </ListGroup.Item>
+              </ListGroup>
             </Col>
           </Row>
         </>

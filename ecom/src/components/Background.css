@@ -59,9 +59,27 @@
     height: 60px;
     line-height: 60px;
 }
+.box:focus{
+    outline: none;
+}
 
 .svi{
     position: absolute;
     left: 10px;
-    bottom: 15px;
+    bottom: 75px;
+}
+.button{
+    height: 60px;
+    border: none;
+    line-height: 60px;
+    font-size: 1rem;
+    width: 100%;
+    position: relative;
+    bottom: 60px;
+    left: 380px;
+    width: 130px;
+    display: inline-block;
+    background-color: rgb(67, 176, 42);
+    overflow: hidden;
+
 }

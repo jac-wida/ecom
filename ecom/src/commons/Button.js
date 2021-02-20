@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export const Button = styled.div`
+export const Buttons = styled.div`
   border: 1px solid transparent;
   border-radius: 4px;
   font-weight: 600;
@@ -77,8 +77,8 @@ export const Price = styled.h1`
   vertical-align: middle;
 `;
 
-export const Title = styled.h3`
-  font-size: 24px;
+export const Title = styled.h2`
+  font-size: 26px;
   font-weight: 600;
   line-height: 32px;
   margin-bottom: 8px;

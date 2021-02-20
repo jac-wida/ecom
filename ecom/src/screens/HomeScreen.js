@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { Route } from 'react-router-dom';
 import Product from '../components/Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '../actions/productActions';
@@ -10,20 +11,27 @@ import './HomeScreen.css';
 import Spinnner from '../components/Spinner';
 import Background from '../components/Background';
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
 
+  const keyword = match.params.keyword;
+
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]);
 
   return (
     <>
-      <Background />
+      <Route render={({ history }) => <Background history={history} />} />
+
       <div className='latest'>
-        <h1>LATEST PRODUCTS</h1>
+        {keyword ? (
+          <h1 className='text-center'>You Seacrched</h1>
+        ) : (
+          <h1>LATEST PRODUCTS</h1>
+        )}
         {loading ? (
           <Spinnner />
         ) : error ? (
